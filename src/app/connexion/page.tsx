@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function Login(){return <main className="shell section"><Link href="/">← Accueil</Link><article className="card" style={{maxWidth:460,margin:"48px auto"}}><div className="eyebrow">HEUREUX DE TE REVOIR</div><h1 style={{fontFamily:"Manrope"}}>Connexion</h1><p>L’authentification Supabase sera activée après la configuration du projet.</p><p><Link href="/inscription">Créer un compte</Link></p></article></main>}
