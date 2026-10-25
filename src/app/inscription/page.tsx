@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function Signup(){return <main className="shell section"><Link href="/">← Accueil</Link><article className="card" style={{maxWidth:460,margin:"48px auto"}}><div className="eyebrow">TON PARCOURS COMMENCE ICI</div><h1 style={{fontFamily:"Manrope"}}>Créer un compte</h1><p>Le formulaire sera connecté à Supabase après configuration des règles de sécurité.</p><p><Link href="/connexion">J’ai déjà un compte</Link></p></article></main>}
