@@ -45,6 +45,19 @@ export async function createProgram(formData: FormData) {
   const { error } = await supabase.from("programs").insert({ title, class_id, subject_id, track_id, description: String(formData.get("description") ?? "").trim() || null, status: "DRAFT" });
   revalidatePath("/admin/programmes"); redirect(error ? "/admin/programmes?error=creation-programme" : "/admin/programmes?success=programme");
 }
+export async function updateProgram(formData: FormData) {
+  const supabase = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const class_id = String(formData.get("class_id") ?? "");
+  const subject_id = String(formData.get("subject_id") ?? "");
+  const track_id = String(formData.get("track_id") ?? "").trim() || null;
+  const description = String(formData.get("description") ?? "").trim() || null;
+  if (!id || !title || !class_id || !subject_id) redirect("/admin/programmes?error=programme-incomplet");
+  const { error } = await supabase.from("programs").update({ title, class_id, subject_id, track_id, description }).eq("id", id);
+  revalidatePath("/admin/programmes");
+  redirect(error ? "/admin/programmes?error=modification-programme" : "/admin/programmes?success=programme-modifie");
+}
 export async function updateProgramStatus(formData: FormData) {
   const supabase = await requireAdmin(); const id = String(formData.get("id") ?? ""); const status = String(formData.get("status") ?? "");
   const allowed = ["DRAFT", "SUBMITTED", "REVIEW", "APPROVED", "PUBLISHED", "REJECTED", "ARCHIVED"] as const;
