@@ -77,3 +77,30 @@ export async function createLesson(formData: FormData) {
   const { error } = await supabase.from("lessons").insert({ title, module_id, summary: String(formData.get("summary") ?? "").trim() || null, content: { format: "html", body: String(formData.get("content") ?? "").trim() }, curriculum_status: "STRUCTURED_DRAFT", status: "DRAFT" });
   revalidatePath("/admin/programmes"); redirect(error ? "/admin/programmes?error=creation-lecon" : "/admin/programmes?success=lecon");
 }
+
+export async function updateModule(formData: FormData) {
+  const supabase = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim() || null;
+  const sort_order = Number(formData.get("sort_order") ?? 0);
+  if (!id || !title) redirect("/admin/programmes?error=chapitre-incomplet");
+  const { error } = await supabase.from("modules").update({ title, description, sort_order }).eq("id", id);
+  revalidatePath("/admin/programmes");
+  redirect(error ? "/admin/programmes?error=modification-chapitre" : "/admin/programmes?success=chapitre-modifie");
+}
+export async function updateLesson(formData: FormData) {
+  const supabase = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const summary = String(formData.get("summary") ?? "").trim() || null;
+  const body = String(formData.get("content") ?? "").trim();
+  const duration = Number(formData.get("duration_minutes") ?? 0);
+  const sort_order = Number(formData.get("sort_order") ?? 0);
+  if (!id || !title) redirect("/admin/programmes?error=lecon-incomplete");
+  const { error } = await supabase.from("lessons").update({
+    title, summary, content: { format: "html", body }, duration_minutes: duration > 0 ? duration : null, sort_order
+  }).eq("id", id);
+  revalidatePath("/admin/programmes");
+  redirect(error ? "/admin/programmes?error=modification-lecon" : "/admin/programmes?success=lecon-modifiee");
+}
