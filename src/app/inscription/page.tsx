@@ -26,7 +26,7 @@ export default function Signup() {
         password,
         options: {
           data: { display_name: displayName.trim() },
-          emailRedirectTo: `${window.location.origin}/connexion`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/apprendre`,
         },
       });
       if (authError) throw authError;
